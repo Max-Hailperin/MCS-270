@@ -1,0 +1,6 @@
+.gwt-MenuItem-disabled {
+	color: Gray;
+}
+.gwt-MenuItem-chosen:after {
+	content: " ✓";
+}
