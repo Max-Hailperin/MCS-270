@@ -1,6 +1,5 @@
 package edu.gac.mcs270.gack.client.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Wizard extends AutoPerson {
