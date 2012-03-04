@@ -6,6 +6,15 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+  <servlet>
+  	<servlet-name>loaderImpl</servlet-name>
+  	<servlet-class>edu.gac.mcs270.gack.server.LoaderImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>loaderImpl</servlet-name>
+  	<url-pattern>/gack/loader</url-pattern>
+  </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>

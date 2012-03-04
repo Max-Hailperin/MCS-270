@@ -1,0 +1,2 @@
+serviceClass: edu.gac.mcs270.gack.shared.Loader
+path: 217F298A506E85F8700D6206527E9DB3.gwt.rpc
