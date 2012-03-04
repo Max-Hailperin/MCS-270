@@ -3,23 +3,22 @@ package edu.gac.mcs270.gack.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.gac.mcs270.gack.client.ui.GraphicalUserInterface;
 import edu.gac.mcs270.gack.shared.domain.Person;
 import edu.gac.mcs270.gack.shared.domain.Place;
 import edu.gac.mcs270.gack.shared.domain.Thing;
 
 public class Utility {
 	
-	private static GraphicalUserInterface userInterface;
-	public static void setUserInterface(GraphicalUserInterface userInterface) {
-		Utility.userInterface = userInterface;
+	private static MessageDisplay display;
+	public static void setMessageDisplay(MessageDisplay display) {
+		Utility.display = display;
 	}
 
 	public static void displayMessage(String text) {
-		if (userInterface == null) {
+		if (display == null) {
 			System.out.println(text);
 		} else {
-			userInterface.displayMessage(text);
+			display.displayMessage(text);
 		}
 	}
 	

@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.gac.mcs270.gack.client.MessageDisplay;
 import edu.gac.mcs270.gack.client.Registry;
 import edu.gac.mcs270.gack.client.Utility;
 import edu.gac.mcs270.gack.shared.Loader;
@@ -28,7 +29,7 @@ import edu.gac.mcs270.gack.shared.domain.Person;
 import edu.gac.mcs270.gack.shared.domain.Scroll;
 import edu.gac.mcs270.gack.shared.domain.Thing;
 
-public class GraphicalUserInterface implements EntryPoint {
+public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 	
 	private Person player;
 	private Registry registry;
@@ -76,7 +77,7 @@ public class GraphicalUserInterface implements EntryPoint {
 			}			
 		});
 
-		Utility.setUserInterface(this);
+		Utility.setMessageDisplay(this);
 		RootPanel rootPanel = RootPanel.get();
 		
 		VerticalPanel verticalPanel = new VerticalPanel();

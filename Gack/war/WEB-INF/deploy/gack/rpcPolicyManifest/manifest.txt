@@ -1,3 +1,2 @@
 # Module gack
 # RPC service class, partial path of RPC policy file
-edu.gac.mcs270.gack.shared.Loader, 217F298A506E85F8700D6206527E9DB3.gwt.rpc
