@@ -1,4 +1,4 @@
-package edu.gac.mcs270.gack.client.domain;
+package edu.gac.mcs270.gack.shared.domain;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import edu.gac.mcs270.gack.client.Utility;
 
 public class Witch extends AutoPerson {
-	
+
+	private static final long serialVersionUID = 7868030973413938410L;
 	private Place pond;
 	
 	public Witch(String name, Place place, int threshold, Place pond) {
 		super(name, place, threshold);
 		this.pond = pond;
 	}
+	
+	protected Witch(){}
 
 	@Override
 	public void act() {

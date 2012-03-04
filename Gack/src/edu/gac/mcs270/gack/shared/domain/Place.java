@@ -1,5 +1,6 @@
-package edu.gac.mcs270.gack.client.domain;
+package edu.gac.mcs270.gack.shared.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +8,9 @@ import java.util.Map;
 
 import edu.gac.mcs270.gack.client.Utility;
 
-public class Place {
+public class Place implements Serializable {
 	
+	private static final long serialVersionUID = 4262130263204312985L;
 	private String name;
 	private Map<String, Place> neighborMap;
 	private List<Thing> contents;
@@ -26,6 +28,8 @@ public class Place {
 		this.contents = new ArrayList<Thing>();
 		this.occupants = new ArrayList<Person>();
 	}
+	
+	protected Place(){}
 	
 	public List<String> exits() {
 		return new ArrayList<String>(neighborMap.keySet());

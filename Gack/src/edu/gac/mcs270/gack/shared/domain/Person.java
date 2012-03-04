@@ -1,12 +1,14 @@
-package edu.gac.mcs270.gack.client.domain;
+package edu.gac.mcs270.gack.shared.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.gac.mcs270.gack.client.Utility;
 
-public class Person {
+public class Person implements Serializable {
 	
+	private static final long serialVersionUID = -7660549827532417321L;
 	private String name;
 	private Place place;
 	private List<Thing> possessions;
@@ -23,6 +25,8 @@ public class Person {
 		this.possessions = new ArrayList<Thing>();
 		place.gain(this);
 	}
+	
+	protected Person(){}
 	
 	public void say(String text) {
 		Utility.displayMessage("At " + place + ": " + this + " says -- " + text);

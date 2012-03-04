@@ -2,7 +2,8 @@ package edu.gac.mcs270.gack.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import edu.gac.mcs270.gack.client.domain.AutoPerson;
+
+import edu.gac.mcs270.gack.shared.domain.AutoPerson;
 
 public class Registry {
 	

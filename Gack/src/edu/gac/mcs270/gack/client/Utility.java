@@ -3,10 +3,10 @@ package edu.gac.mcs270.gack.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.gac.mcs270.gack.client.domain.Person;
-import edu.gac.mcs270.gack.client.domain.Place;
-import edu.gac.mcs270.gack.client.domain.Thing;
 import edu.gac.mcs270.gack.client.ui.GraphicalUserInterface;
+import edu.gac.mcs270.gack.shared.domain.Person;
+import edu.gac.mcs270.gack.shared.domain.Place;
+import edu.gac.mcs270.gack.shared.domain.Thing;
 
 public class Utility {
 	

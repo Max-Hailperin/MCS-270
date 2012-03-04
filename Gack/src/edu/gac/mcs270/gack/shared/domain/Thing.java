@@ -1,7 +1,10 @@
-package edu.gac.mcs270.gack.client.domain;
+package edu.gac.mcs270.gack.shared.domain;
 
-public class Thing {
+import java.io.Serializable;
+
+public class Thing implements Serializable {
 	
+	private static final long serialVersionUID = -5228774276830723160L;
 	private String name;
 	private Person owner;
 	
@@ -14,6 +17,8 @@ public class Thing {
 		super();
 		this.name = name;
 	}
+	
+	protected Thing(){}
 	
 	public boolean isOwned() {
 		return owner != null;

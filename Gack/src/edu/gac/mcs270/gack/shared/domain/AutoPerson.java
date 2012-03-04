@@ -1,4 +1,4 @@
-package edu.gac.mcs270.gack.client.domain;
+package edu.gac.mcs270.gack.shared.domain;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import edu.gac.mcs270.gack.client.Utility;
 
 public class AutoPerson extends Person {
 	
+	private static final long serialVersionUID = 1630121848650414931L;
 	private static Registry registry;
 	
 	public static Registry getRegistry() { return registry; }
@@ -19,7 +20,13 @@ public class AutoPerson extends Person {
 		super(name, place);
 		this.threshold = threshold;
 		this.restlessness = 0;
-		registry.add(this);
+		if(registry != null)
+			registry.add(this);
+	}
+	
+	protected AutoPerson(){
+		if(registry != null)
+			registry.add(this);
 	}
 	
 	public void maybeAct() {
