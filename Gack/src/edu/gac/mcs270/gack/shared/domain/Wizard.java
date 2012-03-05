@@ -17,7 +17,7 @@ public class Wizard extends AutoPerson {
 	@Override
 	public void act() {
 		List<Scroll> scrolls = Scroll.scrollsIn(getPlace());
-		if ((!scrolls.isEmpty()) && (!getPlace().equals(chamber))) {
+		if ((!scrolls.isEmpty()) && (getPlace() != chamber)) {
 			take(scrolls.get(0));
 			moveTo(chamber);
 			lose(scrolls.get(0));

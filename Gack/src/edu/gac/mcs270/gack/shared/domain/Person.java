@@ -45,7 +45,7 @@ public class Person implements Serializable {
 	public List<Person> otherPeopleAtSamePlace() {
 		List<Person> otherPeopleAtSamePlace = new ArrayList<Person>();
 		for (Person occupant : place.getOccupants()) {
-			if (!occupant.equals(this)) {
+			if (occupant != this) {
 				otherPeopleAtSamePlace.add(occupant);
 			}
 		}
@@ -63,7 +63,7 @@ public class Person implements Serializable {
 	}
 	
 	public void read(Scroll scroll) {
-		if ((scroll.isOwned()) && (scroll.getOwner().equals(this))) {
+		if (scroll.getOwner() == this) {
 			scroll.beRead();
 		} else {
 			Utility.displayMessage(this + " does not have " + scroll);
@@ -96,7 +96,7 @@ public class Person implements Serializable {
 	}
 	
 	public void take(Thing thing) {
-		if (equals(thing.getOwner())) {
+		if (this == thing.getOwner()) {
 			Utility.displayMessage(this + " already has " + thing);
 		} else {
 			if (thing.isOwned()) {
@@ -111,7 +111,7 @@ public class Person implements Serializable {
 	}
 	
 	public void lose(Thing thing) {
-		if (!thing.getOwner().equals(this)) {
+		if (thing.getOwner() != this) {
 			Utility.displayMessage(this + " doesn't have " + thing);
 		} else {
 			thing.becomeUnowned();
