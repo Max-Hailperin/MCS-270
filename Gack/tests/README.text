@@ -1,1 +1,0 @@
-This directory is intended for Java source files that are jUnit tests. It should parallel the normal package hierarchy from src, so that any test is in the same package as the class it is testing.
