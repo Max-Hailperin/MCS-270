@@ -179,11 +179,7 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 
 	private void selectPace(int newPace) {
 		for(MenuItem i : paceMenuItems){
-			if(i.getText().equals(""+newPace)){
-				i.addStyleDependentName("chosen");
-			} else {
-				i.removeStyleDependentName("chosen");
-			}
+			i.setStyleDependentName("chosen", i.getText().equals(""+newPace));
 		}
 		pace = newPace;
 	}
