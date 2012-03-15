@@ -126,6 +126,22 @@ public class Person implements Serializable {
 		}
 	}
 	
+	public void give (Person newOwner, Thing item)
+	{
+		if (item.getOwner() != this) 
+			Utility.displayMessage(this + " does not own " + item);
+		else if (newOwner == this)
+			Utility.displayMessage(this + " already owns " + item);
+		else
+		{
+			this.lose(item);
+			item.setOwner(newOwner);
+			newOwner.getPossessions().add(item);
+			Utility.displayMessage(this + " gave the " + item + " to " + newOwner);
+		}
+		
+	}
+	
 	@Override
 	public String toString() {
 		return name;
