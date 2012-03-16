@@ -19,7 +19,7 @@ public class TestTransfers {
 	@Test
 	public void giveOwnedByDonor(){
 		setupOwnership(donor);
-		donor.give(newOwner, thing);
+		donor.give(thing, newOwner);
 		checkOwnership();
 		assertArrayEquals(new String[]{
 				"At Place: donor says -- newOwner, have Thing", 
@@ -29,20 +29,34 @@ public class TestTransfers {
 	
 	@Test
 	public void giveUnowned(){
-	donor.give(newOwner, thing);	
-	//figure out ownership
+	donor.give(thing, newOwner);	
+	checkUnowned();
 	assertArrayEquals(new String[]{"donor doesn't have Thing"},
 			display.getMessages());
 	}
-	
+	@Test
 	public void giveOwnedByRecipient(){
 		setupOwnership(newOwner);
-		donor.give(newOwner, thing);
+		donor.give(thing, newOwner);
 		checkOwnership();
 		assertArrayEquals(new String[]{"newOwner already has Thing"},
 				display.getMessages());
 	}
+	@Test
+	public void giveOwnedByOther(){
+		Person other = new Person("other", place);
+		setupOwnership(other);
+		donor.give(thing, newOwner);
+		checkOwnedBy(other);
+		assertArrayEquals(new String[]{"donor doesn't have Thing"},
+				display.getMessages());
+	}
 
+	private void checkOwnedBy(Person other) {
+		assertTrue(other.getPossessions().contains(thing));
+		assertEquals(other, thing.getOwner());
+	}
+	
 	@Test
 	public void takeUnowned() {
 		newOwner.take(thing);
@@ -91,8 +105,13 @@ public class TestTransfers {
 	}
 
 	private void checkOwnership() {
-		assertTrue(newOwner.getPossessions().contains(thing));
-		assertEquals(newOwner, thing.getOwner());
+		checkOwnedBy(newOwner);
+	}
+	
+	private void checkUnowned() {
+		assertFalse(newOwner.getPossessions().contains(thing));
+		assertFalse(donor.getPossessions().contains(thing));
+		assertNull(thing.getOwner());
 	}
 
 	@Before
