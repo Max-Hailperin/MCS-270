@@ -62,7 +62,7 @@ public class TestTransfers {
 		setupOwnership(newOwner);
 		newOwner.take(thing);
 		checkOwnership();
-		// TODO check that appropriate message(s) was displayed.
+		assertArrayEquals(new String[]{newOwner + " already has " + thing}, display.getMessages());
 	}
 	
 	@After
