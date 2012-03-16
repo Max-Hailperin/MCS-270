@@ -112,11 +112,12 @@ public class Person implements Serializable {
 	
 	public void give(Person recipient, Thing gift){
 		if (gift.getOwner() != this){
-			Utility.displayMessage(this + "doesn't own " + gift);
+			Utility.displayMessage(this + " doesn't own " + gift);
 		}
 		else{
+			gift.becomeUnowned();
 			gift.setOwner(recipient);
-			this.lose(gift);
+			possessions.remove(gift);
 			recipient.possessions.add(gift);
 			this.say("Here you go, " + recipient + ", Take this " + gift + ".  We best friends now?");
 			recipient.say("Wow!  Thanks for the " + gift + ", " + this + "!  We definitely are best friends!");
