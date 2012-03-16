@@ -7,12 +7,12 @@ import java.util.List;
 import edu.gac.mcs270.gack.client.Utility;
 
 public class Person implements Serializable {
-	
+
 	private static final long serialVersionUID = -7660549827532417321L;
 	private String name;
 	private Place place;
 	private List<Thing> possessions;
-	
+
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 	public Place getPlace() { return place; }
@@ -25,13 +25,13 @@ public class Person implements Serializable {
 		this.possessions = new ArrayList<Thing>();
 		place.gain(this);
 	}
-	
+
 	protected Person(){}
-	
+
 	public void say(String text) {
 		Utility.displayMessage("At " + place + ": " + this + " says -- " + text);
 	}
-	
+
 	public List<Thing> otherThingsAtSamePlace() {
 		List<Thing> otherThingsAtSamePlace = new ArrayList<Thing>();
 		for (Thing thing : place.getContents()) {
@@ -41,7 +41,7 @@ public class Person implements Serializable {
 		}
 		return otherThingsAtSamePlace;
 	}
-	
+
 	public List<Person> otherPeopleAtSamePlace() {
 		List<Person> otherPeopleAtSamePlace = new ArrayList<Person>();
 		for (Person occupant : place.getOccupants()) {
@@ -51,17 +51,17 @@ public class Person implements Serializable {
 		}
 		return otherPeopleAtSamePlace;
 	}
-	
+
 	public void lookAround() {
 		say("I see " + Utility.verbalizeList(otherPeopleAtSamePlace(), "no people") +
 				" and " + Utility.verbalizeList(otherThingsAtSamePlace(), "no objects") +
 				" and can go " + Utility.verbalizeList(place.exits(), "nowhere"));
 	}
-	
+
 	public void listPossessions() {
 		say("I have " + Utility.verbalizeList(possessions, "nothing"));
 	}
-	
+
 	public void read(Scroll scroll) {
 		if (scroll.getOwner() == this) {
 			scroll.beRead();
@@ -69,11 +69,11 @@ public class Person implements Serializable {
 			Utility.displayMessage(this + " does not have " + scroll);
 		}
 	}
-	
+
 	public void haveFit() {
 		say("Yaaaah! I am upset");
 	}
-	
+
 	public void moveTo(Place newPlace) {
 		Utility.displayMessage(this + " moves from " + place + " to " + newPlace);
 		place.lose(this);
@@ -85,7 +85,7 @@ public class Person implements Serializable {
 		place = newPlace;
 		greet(otherPeopleAtSamePlace());
 	}
-	
+
 	public void go(String direction) {
 		Place newPlace = place.neighborTowards(direction);
 		if (newPlace == null) {
@@ -94,7 +94,7 @@ public class Person implements Serializable {
 			moveTo(newPlace);
 		}
 	}
-	
+
 	public void take(Thing thing) {
 		if (this == thing.getOwner()) {
 			Utility.displayMessage(this + " already has " + thing);
@@ -109,7 +109,7 @@ public class Person implements Serializable {
 			say("I take " + thing);
 		}
 	}
-	
+
 	public void lose(Thing thing) {
 		if (thing.getOwner() != this) {
 			Utility.displayMessage(this + " doesn't have " + thing);
@@ -119,15 +119,29 @@ public class Person implements Serializable {
 			say("I lose " + thing);
 		}
 	}
-	
+
 	public void greet(List<Person> people) {
 		if (!people.isEmpty()) {
 			say("Hi " + Utility.verbalizeList(people, "no one")); // "no one" can't happen
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
 	}
+
+	public void give(Person newOwner, Thing thing) {
+		if (this != thing.getOwner()){
+			Utility.displayMessage(this + " can't give " + thing);
+		} else {
+			if(thing.isOwned()){
+				this.lose(thing);
+				thing.setOwner(newOwner);
+				newOwner.possessions.add(thing);
+				say("I give " + thing);
+			}
+		}
+	}
 }
+
