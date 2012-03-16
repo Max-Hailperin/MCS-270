@@ -124,7 +124,7 @@ public class Person implements Serializable {
 			say(recipient + ", have " + thing);
 			recipient.say("Thanks, " + this + "!");
 		}
-		}
+	}
 	
 	
 	public void lose(Thing thing) {
