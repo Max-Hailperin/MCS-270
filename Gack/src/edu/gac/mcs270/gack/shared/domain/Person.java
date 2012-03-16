@@ -126,6 +126,21 @@ public class Person implements Serializable {
 		}
 	}
 	
+	public void give(Person recipient, Thing item){
+		if (this.possessions.contains(item)){
+			this.lose(item);
+			recipient.possessions.add(item);
+			item.setOwner(recipient);
+			recipient.say("I take " + item);
+			
+		}
+		else{
+			this.say("I can't do that!");
+		}
+		
+	}
+	
+	
 	@Override
 	public String toString() {
 		return name;
