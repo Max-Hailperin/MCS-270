@@ -110,6 +110,21 @@ public class Person implements Serializable {
 		}
 	}
 	
+	public void give(Person newOwner, Thing thing) {
+		if (newOwner == this) {
+			Utility.displayMessage(this + " already has " + thing);
+		} else {
+			if (!thing.isOwned() || thing.getOwner() != this) {
+				Utility.displayMessage(thing + " is not " + this + "'s to give");
+			} else {	
+				this.lose(thing);
+				newOwner.possessions.add(thing);
+				thing.setOwner(newOwner);
+				say("I give " + newOwner + " " + thing);
+			}	
+		}
+	}
+	
 	public void lose(Thing thing) {
 		if (thing.getOwner() != this) {
 			Utility.displayMessage(this + " doesn't have " + thing);
