@@ -21,14 +21,24 @@ public class TestTransfers {
 		setupOwnership(donor);
 		donor.give(newOwner, thing);
 		checkOwnership();
-		// TODO check appropriate message
+		assertArrayEquals(new String[]{"At Place: donor says -- Here you go, newOwner, Take this thing.  We best friends now?", "At Place: newOwner says -- Wow!  Thanks for the thing, donor!  We definitely are best friends!"},
+				display.getMessages());
 	}
-
+	
+	@Test
+	public void giveUnowned(){
+		Person donor = new Person("donor", place);
+		thing.becomeUnowned();
+		donor.give(newOwner, thing);
+		assertArrayEquals(new String[]{"donor doesn't own thing"},
+				display.getMessages());
+	}
+	
 	@Test
 	public void takeUnowned() {
 		newOwner.take(thing);
 		checkOwnership();
-		assertArrayEquals(new String[]{"At Place: newOwner says -- I take Thing"},
+		assertArrayEquals(new String[]{"At Place: newOwner says -- I take thing"},
 				display.getMessages());
 		}
 
@@ -37,7 +47,8 @@ public class TestTransfers {
 		setupOwnership(newOwner);
 		newOwner.take(thing);
 		checkOwnership();
-		// TODO check that appropriate message(s) was displayed.
+		assertArrayEquals(new String[]{"newOwner already has thing" }, 
+				display.getMessages());
 	}
 	
 	@After
@@ -58,9 +69,9 @@ public class TestTransfers {
 		newOwner.take(thing);
 		checkOwnership();
 		assertArrayEquals(new String[]{
-				"At Place: oldOwner says -- I lose Thing",
+				"At Place: oldOwner says -- I lose thing",
 				"At Place: oldOwner says -- Yaaaah! I am upset",
-				"At Place: newOwner says -- I take Thing"},
+				"At Place: newOwner says -- I take thing"},
 				display.getMessages());
 
 	}
@@ -79,7 +90,7 @@ public class TestTransfers {
 	public void createObjects() {
 		place = new Place("Place");
 		newOwner = new Person("newOwner", place);
-		thing = new Thing("Thing");
+		thing = new Thing("thing");
 	}
 
 }
