@@ -16,6 +16,16 @@
   	<url-pattern>/gack/loader</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>persistenceImpl</servlet-name>
+  	<servlet-class>edu.gac.mcs270.gack.server.PersistenceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>persistenceImpl</servlet-name>
+  	<url-pattern>/gack/persistence</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Gack.html</welcome-file>

@@ -24,6 +24,8 @@ import edu.gac.mcs270.gack.client.Registry;
 import edu.gac.mcs270.gack.client.Utility;
 import edu.gac.mcs270.gack.shared.Loader;
 import edu.gac.mcs270.gack.shared.LoaderAsync;
+import edu.gac.mcs270.gack.shared.Persistence;
+import edu.gac.mcs270.gack.shared.PersistenceAsync;
 import edu.gac.mcs270.gack.shared.domain.AutoPerson;
 import edu.gac.mcs270.gack.shared.domain.Person;
 import edu.gac.mcs270.gack.shared.domain.Scroll;
@@ -44,6 +46,9 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 	private MenuItem mntmLookAround;
 	private MenuItem mntmListPossessions;
 	private MenuItem mntmChangePlayersName;
+	private MenuItem mntmInit;
+	private MenuItem mntmLoad;
+	private MenuItem mntmSave;
 	
 	private void playTurn() {
 		registry.trigger(pace);
@@ -55,27 +60,30 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 		Element element = textArea.getElement();
 		element.setScrollTop(element.getScrollHeight());
 	}
+	
+	private void start(Person player, String heading){
+		this.player = player;
+		this.registry = new Registry();
+		AutoPerson.setRegistry(registry);
+		textArea.setText(heading + "\n");
+		configureMenus();
+	}
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		this.registry = new Registry();
-		AutoPerson.setRegistry(registry);
-		
-		LoaderAsync loader = GWT.create(Loader.class);
-		final GraphicalUserInterface gui = this;
-		loader.getPlayer(new AsyncCallback<Person>(){
+		final LoaderAsync loader = GWT.create(Loader.class);
+		final AsyncCallback<Person> loaderCallback = new AsyncCallback<Person>(){
 			public void onSuccess(Person player){
-				gui.player = player;
-				textArea.setText("Welcome to the Imaginary Land of Gack\n");
-				configureMenus();
+				start(player, "Welcome to the Imaginary Land of Gack");
 			}
 			
 			public void onFailure(Throwable caught){
 				throw new Error("Server trouble", caught);
 			}			
-		});
+		};
+		loader.getPlayer(loaderCallback);
 
 		Utility.setMessageDisplay(this);
 		RootPanel rootPanel = RootPanel.get();
@@ -88,6 +96,44 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 		verticalPanel.add(menuBar);
 		menuBar.setWidth("100%");
 		
+		final PersistenceAsync persistence = GWT.create(Persistence.class);
+		MenuBar persistenceBar = new MenuBar(true);
+		MenuItem mntmPersistence = new MenuItem("World", false, persistenceBar);
+		
+		mntmInit = new MenuItem("Reinitialize", false, new Command() {
+			public void execute() {
+				displayMessage("\n>>> Reinitialize world");
+				loader.getPlayer(loaderCallback);
+			}
+		});
+		persistenceBar.addItem(mntmInit);
+
+		mntmLoad = new MenuItem("Load...", false, new Command() {
+			public void execute() {
+				new LoadDialog(persistence, GraphicalUserInterface.this);
+			}
+		});
+		persistenceBar.addItem(mntmLoad);
+		
+		mntmSave = new MenuItem("Save", false, new Command() {
+			public void execute() {
+				displayMessage("\n>>> Save world");
+				persistence.savePlayer(player,
+						new AsyncCallback<Void>(){
+					public void onSuccess(Void v){
+						displayMessage("Saving of " + player + "'s world succeeded.");
+					}
+
+					public void onFailure(Throwable caught){
+						displayMessage("WARNING: Saving of " + player + "'s world failed.");
+					}			
+				});
+
+			}
+		});
+		persistenceBar.addItem(mntmSave);
+		menuBar.addItem(mntmPersistence);
+
 		MenuBar menuBar_1 = new MenuBar(true);
 		
 		MenuItem mntmGetInfo = new MenuItem("Get info", false, menuBar_1);
@@ -98,7 +144,6 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 				player.lookAround();
 			}
 		});
-		mntmLookAround.setEnabled(false);
 		menuBar_1.addItem(mntmLookAround);
 		
 		mntmListPossessions = new MenuItem("List possessions", false, new Command() {
@@ -107,7 +152,6 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 				player.listPossessions();
 			}
 		});
-		mntmListPossessions.setEnabled(false);
 		menuBar_1.addItem(mntmListPossessions);
 		menuBar.addItem(mntmGetInfo);
 		MenuBar menuBar_2 = new MenuBar(true);
@@ -116,27 +160,22 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 		MenuBar goMenu = new MenuBar(true);
 		
 		mntmGo = new MenuItem("Go", false, goMenu);
-		mntmGo.setEnabled(false);
 		menuBar_2.addItem(mntmGo);
 		MenuBar menuBar_4 = new MenuBar(true);
 		
 		mntmTake = new MenuItem("Take", false, menuBar_4);
-		mntmTake.setEnabled(false);
 		menuBar_2.addItem(mntmTake);
 		MenuBar menuBar_5 = new MenuBar(true);
 		
 		mntmDrop = new MenuItem("Drop", false, menuBar_5);
-		mntmDrop.setEnabled(false);
 		menuBar_2.addItem(mntmDrop);
 		MenuBar menuBar_6 = new MenuBar(true);
 		
 		mntmRead = new MenuItem("Read", false, menuBar_6);
-		mntmRead.setEnabled(false);
 		menuBar_2.addItem(mntmRead);
 		MenuBar menuBar_7 = new MenuBar(true);
 		
 		mntmGive = new MenuItem("Give", false, menuBar_7);
-		mntmGive.setEnabled(false);
 		menuBar_2.addItem(mntmGive);
 		menuBar.addItem(mntmAct);
 		MenuBar menuBar_8 = new MenuBar(true);
@@ -149,7 +188,6 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 				new NameDialog(GraphicalUserInterface.this);
 			}
 		});
-		mntmChangePlayersName.setEnabled(false);
 		menuBar_8.addItem(mntmChangePlayersName);
 		MenuBar paceMenuBar = new MenuBar(true);
 		
@@ -170,6 +208,8 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 		menuBar_8.addItem(mntmSetPace);
 		menuBar.addItem(mntmConfigure);
 		
+		disableMenuItems();
+		
 		textArea = new TextArea();
 		verticalPanel.add(textArea);
 		textArea.setWidth("100%");
@@ -185,9 +225,16 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 	}
 
 	private void configureMenus() {
+		configureWorldMenu();
 		configureGetInfoMenu();
 		configureActMenu();
 		configureConfigureMenu();
+	}
+	
+	private void configureWorldMenu(){
+		mntmInit.setEnabled(true);
+		mntmLoad.setEnabled(true);
+		mntmSave.setEnabled(true);
 	}
 
 	private void configureActMenu() {
@@ -315,5 +362,57 @@ public class GraphicalUserInterface implements EntryPoint, MessageDisplay {
 			this.show();
 			nameBox.setFocus(true);
 		}
+	}
+	
+	private static class LoadDialog extends DialogBox {
+		public LoadDialog(final PersistenceAsync persistence, 
+				final GraphicalUserInterface gui) {
+			this.setModal(true);
+			this.setText("Input name");
+			final TextBox nameBox = new TextBox();
+			this.setWidget(nameBox);
+			nameBox.addKeyPressHandler(new KeyPressHandler() {
+				public void onKeyPress(KeyPressEvent event) {
+					if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+						final String name = nameBox.getText();
+						gui.displayMessage("\n>>> Load world of " + name);
+						gui.disableMenuItems();
+						persistence.getPlayer(name,
+								new AsyncCallback<Person>(){
+							public void onSuccess(Person player){
+								if(player == null){
+									gui.displayMessage("No saved world existed for " + name);
+									gui.configureMenus();
+								} else {
+									gui.start(player, "Welcome back, " + name + ".");
+								}
+							}
+
+							public void onFailure(Throwable caught){
+								gui.displayMessage("Loading failed due to technical difficulties.");
+								gui.displayMessage(caught.getMessage());
+								gui.configureMenus();
+							}			
+						});
+						LoadDialog.this.hide();
+					}
+				}});
+			this.show();
+			nameBox.setFocus(true);
+		}
+	}
+	
+	private void disableMenuItems(){
+		mntmGo.setEnabled(false);
+		mntmTake.setEnabled(false);
+		mntmDrop.setEnabled(false);
+		mntmRead.setEnabled(false);
+		mntmGive.setEnabled(false);
+		mntmLookAround.setEnabled(false);
+		mntmListPossessions.setEnabled(false);
+		mntmChangePlayersName.setEnabled(false);
+		mntmInit.setEnabled(false);
+		mntmLoad.setEnabled(false);
+		mntmSave.setEnabled(false);
 	}
 }
